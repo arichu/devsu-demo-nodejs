@@ -1,0 +1,40 @@
+# Stacks detected: deps:node:.,test:jest:
+version: 2.1
+orbs:
+  node: circleci/node@5
+  aws-ecr: circleci/aws-ecr@9.0.2
+jobs:
+  test:
+    # Install node dependencies and run tests
+    executor: node/default
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm install jest-junit
+      - run:
+          name: Run tests
+          command: npm test -- --coverage
+      - store_test_results:
+          path: ./test-results/
+  build-deploy:
+    # This is an example deploy job, not actually used by the workflow
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Replace this with steps to deploy to users
+      - run:
+          name: build docker image
+          command: docker build -t devsu-nodedemo:$TAG
+      - store_test_results:
+          path: ./dockerimages/
+workflows:
+  build-and-test:
+    jobs:
+      - test
+      - build-deploy
+         requires:
+           - test
