@@ -21,16 +21,14 @@ jobs:
       - store_test_results:
           path: ./test-results/
   build-deploy:
-    # This is an example deploy job, not actually used by the workflow
+    # building image
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
       - run:
           name: build docker image
           command: docker build . -t devsu-nodedemo:$TAG
-      - store_test_results:
-          path: ./dockerimages/
 workflows:
   build-and-test:
     jobs:
