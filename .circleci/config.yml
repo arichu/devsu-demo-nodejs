@@ -17,7 +17,7 @@ jobs:
           command: npm install jest-junit
       - run:
           name: Run tests
-          command: npm test -- --coverage --runInBand
+          command: npm test
       - store_test_results:
           path: ./test-results/
   build-deploy:
