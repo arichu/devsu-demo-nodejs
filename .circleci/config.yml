@@ -28,7 +28,7 @@ jobs:
       # Replace this with steps to deploy to users
       - run:
           name: build docker image
-          command: docker build -t devsu-nodedemo:$TAG
+          command: docker build . -t devsu-nodedemo:$TAG
       - store_test_results:
           path: ./dockerimages/
 workflows:
