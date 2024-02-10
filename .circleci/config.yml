@@ -100,7 +100,7 @@ workflows:
           context: aws
           requires:
             - test
-      -deploy_helm_chart:
+      - deploy_helm_chart:
           requires:
             - build-push-deploy
           
