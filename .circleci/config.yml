@@ -51,6 +51,8 @@ jobs:
                 role_arn: $ARN_ROLE
                 region: $REGION
           create_repo: true
+          profile_name: OIDC-PROFILE
+          public_registry: false
           path: ./charts
           region: $REGION
           repo: $AWS_ECR_HELM_REPO_NAME
