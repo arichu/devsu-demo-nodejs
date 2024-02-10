@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
   aws-ecr: circleci/aws-ecr@9.0.2
+  aws-cli: circleci/aws-cli@4.0
 jobs:
   test:
     # Install node dependencies and run tests
@@ -29,7 +30,36 @@ jobs:
       - setup_remote_docker
       - run:
           name: build docker image
-          command: docker build . -t devsu-nodedemo:$TAG
+          command: docker build . -t devsu/nodedemo:$TAG
+      - run:
+          name: Save image as tar
+          command: |
+            mkdir -p images
+            docker image save -o "images/devsu-nodedemo_$TAG" "devsu/nodedemo:$TAG"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - images
+  push-to-aws:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker
+      - run:
+          name: Load image
+          command: |
+            docker image load < "images/devsu-nodedemo_$TAG"
+      - aws-cli/setup:
+           role-arn: 'arn:aws:iam::851725212434:role/CIrcleCIRole'
+           aws-region: "us-east-1"
+           # optional parameters
+           profile-name: "OIDC-PROFILE"
+      - run:
+         name: Log-into-AWS-ECR
+         command: |    
+           aws ecr get-login-password --profile "OIDC-PROFILE"
 workflows:
   build-and-test:
     jobs:
@@ -37,3 +67,8 @@ workflows:
       - build-deploy:
           requires:
             - test
+      - push-to-aws:
+          context: aws
+          requires:
+            - build-deploy
+          
