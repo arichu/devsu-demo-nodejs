@@ -52,16 +52,16 @@ jobs:
           name: Load image
           command: |
             docker image load < "images/devsu-nodedemo_$TAG"
-      - aws-cli/setup:
+      - aws-ecr/build_and_push_image:
+          auth:
+            - aws-cli/setup:
+                profile_name: OIDC-PROFILE
+                role_arn: $ARN_ROLE
+                region: $REGION
+          create_repo: false
           profile_name: OIDC-PROFILE
-          role_arn: $ARN_ROLE
-          region: $REGION
-          # optional parameters
-      - run:
-          name: Log-into-AWS-ECR
-          command: |    
-            aws ecr get-login-password --profile OIDC-PROFILE
-      - aws-ecr/push_image:
+          public_registry: false
+          push_image: true
           region: $REGION
           repo: $REPOSITORY
           tag: $TAG
