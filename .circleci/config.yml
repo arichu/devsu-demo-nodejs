@@ -36,7 +36,7 @@ jobs:
                 profile_name: OIDC-PROFILE
                 role_arn: $ARN_ROLE
                 region: $REGION
-          create_repo: false
+          create_repo: true
           profile_name: OIDC-PROFILE
           public_registry: false
           push_image: true
