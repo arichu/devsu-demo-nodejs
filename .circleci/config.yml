@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
   aws-ecr: circleci/aws-ecr@9.0.2
-  aws-cli: circleci/aws-cli@4.0
+  aws-cli: circleci/aws-cli@4.1.2
 jobs:
   test:
     # Install node dependencies and run tests
@@ -52,14 +52,14 @@ jobs:
           command: |
             docker image load < "images/devsu-nodedemo_$TAG"
       - aws-cli/setup:
-           role-arn: 'arn:aws:iam::851725212434:role/CIrcleCIRole'
-           aws-region: "us-east-1"
+           role-arn: $ARN_ROLE
+           aws-region: $REGION
            # optional parameters
-           profile-name: "OIDC-PROFILE"
+           profile-name: OIDC-PROFILE
       - run:
          name: Log-into-AWS-ECR
          command: |    
-           aws ecr get-login-password --profile "OIDC-PROFILE"
+           aws ecr get-login-password --profile OIDC-PROFILE
       - aws-ecr/push_image:
           region: $REGION
           repo: $REPOSITORY
