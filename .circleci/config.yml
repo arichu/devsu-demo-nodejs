@@ -55,8 +55,6 @@ jobs:
           region: $REGION
           repo: $AWS_ECR_HELM_REPO_NAME
           tag: 1.0.0
-          requires:
-            - aws-ecr/build_and_push_image
   deploy_helm_chart:
     docker:
       - image: cimg/python:3.10.7
