@@ -21,7 +21,7 @@ jobs:
           command: npm test -- --coverage --forceExit
       - store_test_results:
           path: ./test-results/
-  build-deploy:
+  build-push:
     # building image
     executor: aws-cli/default
     docker:
@@ -29,29 +29,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: build docker image
-          command: docker build . -t devsu/nodedemo:$TAG
-      - run:
-          name: Save image as tar
-          command: |
-            mkdir -p images
-            docker image save -o "images/devsu-nodedemo_$TAG" "devsu/nodedemo:$TAG"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - images
-  push-to-aws:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - attach_workspace:
-          at: .
-      - setup_remote_docker
-      - run:
-          name: Load image
-          command: |
-            docker image load < "images/devsu-nodedemo_$TAG"
       - aws-ecr/build_and_push_image:
           auth:
             - aws-cli/setup:
@@ -69,11 +46,8 @@ workflows:
   build-and-test:
     jobs:
       - test
-      - build-deploy:
-          requires:
-            - test
-      - push-to-aws:
+      - build-push:
           context: aws
           requires:
-            - build-deploy
+            - test
           
