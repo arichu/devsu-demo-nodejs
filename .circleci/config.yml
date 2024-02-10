@@ -60,6 +60,10 @@ jobs:
          name: Log-into-AWS-ECR
          command: |    
            aws ecr get-login-password --profile "OIDC-PROFILE"
+      - aws-ecr/push_image:
+          region: $REGION
+          repo: $REPOSITORY
+          tag: $TAG
 workflows:
   build-and-test:
     jobs:
