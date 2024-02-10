@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/<AWS_ECR_REPO_NAME>
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+labels:
+  env: "dev"
+
+service:
+  port: 8000
+  targetPort: 8000
+  type: LoadBalancer
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+
+ingress:
+  enabled: false
+
+imagePullSecrets:
+  - name: regcred
