@@ -55,7 +55,7 @@ jobs:
       - aws-cli/setup:
           profile_name: OIDC-PROFILE
           role_arn: $ARN_ROLE
-          aws_region: $REGION
+          region: $REGION
           # optional parameters
       - run:
           name: Log-into-AWS-ECR
