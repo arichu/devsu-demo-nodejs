@@ -43,7 +43,7 @@ jobs:
           region: $REGION
           repo: $REPOSITORY
           tag: $TAG
-      - aws-ecr/push_helm_chart:
+      - aws-ecr/build_and_push_image:
           account-url: $AWS_ID
           auth:
             - aws-cli/setup:
