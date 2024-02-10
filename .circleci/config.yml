@@ -23,6 +23,7 @@ jobs:
           path: ./test-results/
   build-deploy:
     # building image
+    executor: aws-cli/default
     docker:
       - image: cimg/base:stable
     steps:
@@ -52,10 +53,10 @@ jobs:
           command: |
             docker image load < "images/devsu-nodedemo_$TAG"
       - aws-cli/setup:
-          role-arn: $ARN_ROLE
-          aws-region: $REGION
+          profile_name: OIDC-PROFILE
+          role_arn: $ARN_ROLE
+          aws_region: $REGION
           # optional parameters
-          profile-name: OIDC-PROFILE
       - run:
           name: Log-into-AWS-ECR
           command: |    
