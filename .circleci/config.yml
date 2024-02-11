@@ -61,9 +61,12 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
+      - checkoutv
       - aws-cli/setup:
-          profile_name: Terraform-PROFILE
+          profile_name: OIDC-PROFILE
+          role_arn: $ARN_ROLE
+          region: $REGION
+      - aws-cli/setup:
           aws_access_key_id: $AWS_ACCESS_KEY
           aws_secret_access_key: $AWS_SECRET_KEY
           region: $REGION
@@ -81,7 +84,7 @@ jobs:
           command: sudo curl -L https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar xz && sudo mv linux-amd64/helm /bin/helm && sudo rm -rf linux-amd64
       - aws-ecr/ecr_login:
           account_id: $AWS_ID
-          profile_name: Terraform-PROFILE
+          profile_name: OIDC-PROFILE
           public_registry: false
           region: $REGION
       - run:
