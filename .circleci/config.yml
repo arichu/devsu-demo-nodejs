@@ -61,7 +61,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkoutv
+      - checkout
       - aws-cli/setup:
           profile_name: OIDC-PROFILE
           role_arn: $ARN_ROLE
