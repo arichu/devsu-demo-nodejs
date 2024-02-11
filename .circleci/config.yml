@@ -102,5 +102,5 @@ workflows:
             - test
       - deploy_helm_chart:
           requires:
-            - build-push-deploy
+            - build-push
           
