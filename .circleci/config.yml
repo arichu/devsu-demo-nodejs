@@ -84,10 +84,6 @@ jobs:
           public_registry: false
           region: $REGION
       - run:
-          name: "cluster configs"
-          command: |
-            eksctl utils write-kubeconfig --cluster=$AWS_EKS_CLUSTER_NAME --region=$REGION
-      - run:
           name: "helm install"
           command: bash ./scripts/deploy-node-app.sh 1.0.0 $AWS_ID.dkr.ecr.$REGION.amazonaws.com $AWS_ECR_HELM_REPO_NAME
 workflows:
