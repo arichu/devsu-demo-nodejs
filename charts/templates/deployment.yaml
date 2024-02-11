@@ -34,9 +34,9 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/users
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/users
               port: http
