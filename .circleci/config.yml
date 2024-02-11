@@ -85,7 +85,7 @@ jobs:
           region: $REGION
       - run:
           name: "helm install"
-          command: bash ./scripts/deploy-node-app.sh 1.0.0 $AWS_ID.dkr.ecr.$REGION.amazonaws.com $AWS_ECR_HELM_REPO_NAME
+          command: bash ./scripts/deploy-node-app.sh 0.1.0 $AWS_ID.dkr.ecr.$REGION.amazonaws.com $AWS_ECR_HELM_REPO_NAME
 workflows:
   build-and-test:
     jobs:
