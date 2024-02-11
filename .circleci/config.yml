@@ -21,7 +21,7 @@ jobs:
           command: npm test -- --coverage --forceExit
       - store_test_results:
           path: ./test-results/
-  build-push-deploy:
+  build-push:
     # building image
     executor: aws-cli/default
     docker:
@@ -43,23 +43,23 @@ jobs:
           region: $REGION
           repo: $REPOSITORY
           tag: $TAG
-      - aws-ecr/build_and_push_image:
-          account_id: $AWS_ID
-          auth:
-            - aws-cli/setup:
-                profile_name: OIDC-PROFILE
-                role_arn: $ARN_ROLE
-                region: $REGION
-          create_repo: true
-          profile_name: OIDC-PROFILE
-          public_registry: false
-          path: ./charts
-          region: $REGION
-          repo: $AWS_ECR_HELM_REPO_NAME
-          tag: 1.0.0
+      #- aws-ecr/push-helm-chart:
+      #    account_id: $AWS_ID
+      #    auth:
+      #      - aws-cli/setup:
+      #          profile_name: OIDC-PROFILE
+      #          role_arn: $ARN_ROLE
+      #          region: $REGION
+      #    create_repo: true
+      #    profile_name: OIDC-PROFILE
+      #    public_registry: false
+      #    path: ./charts
+      #    region: $REGION
+      #    repo: $AWS_ECR_HELM_REPO_NAME
+      #    tag: 1.0.0
   deploy_helm_chart:
     docker:
-      - image: cimg/python:3.10.7
+      - image: cimg/base:stable
     steps:
       - checkout
       - run:
@@ -80,11 +80,11 @@ jobs:
       - run:
           name: "docker login"
           command: |
-            aws ecr get-login-password --region $REGION | docker login --username circleci --password-stdin $AWS_ID.dkr.ecr.$REGION.amazonaws.com
+            aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $AWS_ID.dkr.ecr.$REGION.amazonaws.com
       - run:
           name: "helm login"
           command: |
-            aws ecr get-login-password --region $REGION | helm registry login --username circleci --password-stdin $AWS_ID.dkr.ecr.$REGION.amazonaws.com
+            aws ecr get-login-password --region $REGION | helm registry login --username AWS --password-stdin $AWS_ID.dkr.ecr.$REGION.amazonaws.com
       - run:
           name: "cluster configs"
           command: |
@@ -96,7 +96,7 @@ workflows:
   build-and-test:
     jobs:
       - test
-      - build-push-deploy:
+      - build-push:
           context: aws
           requires:
             - test
