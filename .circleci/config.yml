@@ -63,8 +63,9 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:
-          profile_name: OIDC-PROFILE
-          role_arn: $ARN_ROLE
+          profile_name: Terraform-PROFILE
+          aws_access_key_id: $AWS_SECRET_KEY
+          aws_secret_access_key: $AWS_ACCESS_KEY
           region: $REGION
       - run:
           name: Install eksctl
@@ -80,9 +81,13 @@ jobs:
           command: sudo curl -L https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar xz && sudo mv linux-amd64/helm /bin/helm && sudo rm -rf linux-amd64
       - aws-ecr/ecr_login:
           account_id: $AWS_ID
-          profile_name: OIDC-PROFILE
+          profile_name: Terraform-PROFILE
           public_registry: false
           region: $REGION
+      - run:
+          name: "cluster configs"
+          command: |
+            eksctl utils write-kubeconfig --cluster=$AWS_EKS_CLUSTER_NAME --region=$AWS_CLUSTER_REGION
       - run:
           name: "helm install"
           command: bash ./scripts/deploy-node-app.sh 0.1.0 $AWS_ID.dkr.ecr.$REGION.amazonaws.com $AWS_ECR_HELM_REPO_NAME
