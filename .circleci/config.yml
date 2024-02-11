@@ -80,7 +80,6 @@ jobs:
           command: sudo curl -L https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar xz && sudo mv linux-amd64/helm /bin/helm && sudo rm -rf linux-amd64
       - aws-ecr/ecr_login:
           account_id: $AWS_ID
-          aws_domain: 851725212434.dkr.ecr.us-east-1.amazonaws.com/devsudemo
           profile_name: OIDC-PROFILE
           public_registry: false
           region: $REGION
