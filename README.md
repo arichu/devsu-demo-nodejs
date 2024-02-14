@@ -1,3 +1,12 @@
+# Notes for this test
+
+The CICD tool used is circleCI since is easier to connect with OIDC with aws and the orbs are easy to use, 
+ 
+```bash
+npm test -- --coverage --forceExit
+```
+i had to use the force exit since there was a async problem and jest ended up with errors in CICD,
+
 # Demo Devops NodeJs
 
 This is a simple application to be used in the technical test of DevOps.
